@@ -200,6 +200,28 @@ class MinecraftServer:
         self.stdin('stop\n')
         return
 
+    def save_stop(self):
+        """ Stops saving chunks """
+        self.stdin('save-stop\n')
+        return
+
+    def save_start(self):
+        """ Starts saving chunks """
+        self.stdin('save-start\n')
+        return
+
+    def save_all(self):
+        """ Forces the server to save changes """
+        self.stdin('save-all\n')
+        return
+
+    def list(self):
+        """ Returns a list of all players on the server """
+#        self.stdin('list')
+#        out = self.stderr.split()
+        return
+        
+
     def stdin(self, msg):
         """ Writes to the stdin of the server process """
         self.process.stdin.write(msg)

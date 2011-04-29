@@ -80,14 +80,14 @@ def kit_command(server, output, conf):
     return
 
 @is_mod
-def kits_command(server, output, conf):
+def kits_command(server, output):
     """ Lists all available kits """
     for kit in server.kits:
         server.tell(output.name, kit.name)
     return
 
 @is_op
-def ban_command(server, output, conf):
+def ban_command(server, output):
     """ Bans a player from the server """
     for target in output.message.split()[1:]:
         if target in server.ops:
@@ -98,7 +98,7 @@ def ban_command(server, output, conf):
     return
 
 @is_op
-def kick_command(server, output, conf):
+def kick_command(server, output):
     """ Kicks a player from the server """
     for target in output.message.split()[1:]:
         if target in server.ops:
@@ -108,13 +108,18 @@ def kick_command(server, output, conf):
     return
 
 @is_op
-def backup_command(server, output, conf):
+def backup_command(server, output):
     """ Backs up the server """
+    # Stop saving chunks
+    server.save_off()
+    # Run the external save program
     subprocess.call(CONFIG['backup_command']['script'].split())
+    # Start saving chunks again
+    server.save_on()
     return
 
 @is_mod
-def mods_command(server, output, conf):
+def mods_command(server, output):
     """ Lists all server moderators """
     mods = server.mods
     if len(mods) > 0:
@@ -126,7 +131,7 @@ def mods_command(server, output, conf):
     return
 
 @is_op
-def mod_command(server, output, conf):
+def mod_command(server, output):
     """ Adds the player to the mod list """
     for target in output.message.split()[1:]:
         if target in server.ops:
@@ -139,7 +144,7 @@ def mod_command(server, output, conf):
     return
 
 @is_op
-def demod_command(server, output, conf):
+def demod_command(server, output):
     """ Remove the player from the mod list """
     for target in output.message.split()[1:]:
         if target in server.ops:
