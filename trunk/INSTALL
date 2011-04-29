@@ -1,0 +1,6 @@
+If you already have a Minecraft server setup, extract Pynecraft into that
+directory. If not, extract Pynecraft and place minecraft_server.jar there.
+
+You then start Pynecraft by running:
+
+python run.py
