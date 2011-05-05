@@ -21,6 +21,7 @@ THE SOFTWARE.
 """
 
 def load_blocks_and_items():
+    """ Initializes the name hashmaps """
     for key in BLOCKS_BY_ID.keys():
         BLOCKS_BY_NAME[BLOCKS_BY_ID[key]] = key
     for key in ITEMS_BY_ID.keys():
@@ -28,21 +29,37 @@ def load_blocks_and_items():
     return
 
 def get_item(item):
-    # Is item an ID or name?
-    try:
-    if type(item) is int or item.isdigit():
-        try:
-            item = BLOCKS_BY_NAME[BLOCKS_BY_ID[int(item)]]
-        except:
-            item = ITEMS_BY_NAME[ITEMS_BY_ID[int(item)]]
-    else:
-        try:
-            item = BLOCKS_BY_NAME[item]
-        except:
-            item = ITEMS_BY_NAME[item]
-    except:
+    """ Get an item by name or ID
+
+    Parameters
+    ---------
+    item : int | str
+        The item ID or name
+
+    Returns
+    -------
+    int | None
+    """
+    # Do some type checking
+    if type(item) is str:
+        if item.isdigit():
+            item = int(item)
+    elif type(item) is not int:
         return None
-    return item
+
+    # Now lets look for the item
+    if type(item) is int:
+        if item in BLOCKS_BY_ID.keys():
+            return item
+        if item in ITEMS_BY_ID.keys():
+            return item
+    elif type(item) is str:
+        if item in BLOCKS_BY_NAME.keys():
+            return BLOCKS_BY_NAME[item]
+        if item in ITEMS_BY_NAME.keys():
+            return ITEMS_BY_NAME[item]
+
+    return None
 
 BLOCKS_BY_ID = {
     0: 'air',

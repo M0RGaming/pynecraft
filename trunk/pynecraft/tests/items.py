@@ -27,12 +27,12 @@ import unittest
 class ItemsTest(unittest.TestCase):
 
     def setUp(self):
-        return
-
-    def test_load_blocks_and_items(self):
         # Make sure all the blocks and
         # items are loaded correctly
         load_blocks_and_items()
+        return
+
+    def test_load_blocks_and_items(self):
         for key in BLOCKS_BY_ID.keys():
             self.assertTrue(BLOCKS_BY_ID[key] in BLOCKS_BY_NAME.keys())
             self.assertEquals(key, BLOCKS_BY_NAME[BLOCKS_BY_ID[key]])
