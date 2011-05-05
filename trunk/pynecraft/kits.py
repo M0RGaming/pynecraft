@@ -50,7 +50,7 @@ def load_kits(server):
                 print 'Invalid quantity "%s", skipping item...' % item[1]
                 continue
         if len(items) > 0:
-            server.kits.append(Kit(kit, items))
+            server.kits_list.append(Kit(kit, items))
         else:
             print 'Invalid kit "%s", skipping...' % kit
     return

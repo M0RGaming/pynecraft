@@ -22,11 +22,24 @@ THE SOFTWARE.
 
 from pynecraft.server import MinecraftServer
 from pynecraft.commands import *
+from pynecraft.kits import load_kits
+
+import os
+import unittest
+
+KITS_EXPECTED = ['give other_player 310 1\n', 'give other_player 311 1\n', 'give other_player 312 1\n', 'give other_player 313 1\n']
+
+class TestLog:
+
+    def into(self, msg): return
+    def error(self, msg): return
 
 class TestMinecraftServer(MinecraftServer):
 
-    def __init__(self):
+    def __init__(self, mods):
+        self.mods = mods # Override the mods property
         self.msgs = []
+        MinecraftServer.__init__(self, os.getcwd(), TestLog())
         return
 
     def start(self):
@@ -39,7 +52,7 @@ class TestMinecraftServer(MinecraftServer):
         return
 
     def get_stdin(self):
-        return msgs
+        return self.msgs
 
     def clear(self):
         self.msgs = []
@@ -47,25 +60,55 @@ class TestMinecraftServer(MinecraftServer):
 
 class TestOutput:
 
-    def __init__(self):
+    def __init__(self, d):
+        for key,value in d.items():
+            setattr(self, key, value)
         return
 
-class CommandsTest:
+class CommandsTest(unittest.TestCase):
 
     def setUp(self):
-        self.server = TestMinecraftServer()
+        self.name = 'derp'
+        self.mods = [self.name]
+        self.server = TestMinecraftServer(mods=self.mods)
         return
 
     def test_help_command(self):
-        output = {}
-        help_command(self.server, output, conf)
-        self.assertEquals(self.server.get_stdin())
+        output = TestOutput({
+            'name': self.name,
+            'command': '!help',
+            'message': '',
+            'args': []
+        })
+        help_command(self.server, output, None)
+        self.assertEquals(list, type(self.server.get_stdin()))
+        self.assertEquals(1 + len(COMMANDS), len(self.server.get_stdin()))
         return
 
-    def test_give_command(self.):
+    def test_give_command(self):
+        load_blocks_and_items() # Load item names
+        msg = 'other_player tnt 10'
+        output = TestOutput({
+            'name': self.name,
+            'command': '!give',
+            'message': msg,
+            'args': msg.split()
+        })
+        give_command(self.server, output, None)
+        self.assertEquals(['give other_player 46 10\n'], self.server.get_stdin())
         return
 
     def test_kit_command(self):
+        load_kits(self.server)
+        msg = 'other_player armor'
+        output = TestOutput({
+            'name': self.name,
+            'command': '!kit',
+            'message': msg,
+            'args': msg.split()
+        })
+        kit_command(self.server, output, None)
+        self.assertEquals(KITS_EXPECTED, self.server.get_stdin())
         return
 
     def test_kits_command(self):
@@ -86,5 +129,5 @@ class CommandsTest:
     def test_mod_command(self):
         return
 
-    def test_demod_command():
+    def test_demod_command(self):
         return

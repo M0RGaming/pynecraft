@@ -90,13 +90,13 @@ class MinecraftServer:
     def __init__(self, cwd, log):
         self.cwd = cwd
         self.log = log
-        self.kits = []
+        self.kits_list = []
         return
 
     @property
     def kits(self):
         """ Returns all Kit objects """
-        return self.kits
+        return self.kits_list
 
     def kit(self, output, target, kit):
         """ Gives the kit to a player """
